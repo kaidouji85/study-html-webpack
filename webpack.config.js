@@ -1,25 +1,26 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
+var R = require('ramda');
+
+var STUB_ENTRY_FILES = {
+  stub1: `${__dirname}/stub/stub1.js`,
+  stub2: `${__dirname}/stub/stub2.js`
+};
+
+var OUTPUT_HTMLS = R.pipe(
+  R.mapObjIndexed((value, key) => new HtmlWebpackPlugin({
+    chunks: [key],
+    filename: `${__dirname}/stub/${key}.html`
+  })),
+  R.values
+)(STUB_ENTRY_FILES);
 
 var webpackConfig = {
-  entry: {
-    stub1: `${__dirname}/stub/stub1.js`,
-    stub2: `${__dirname}/stub/stub2.js`
-  },
+  entry: STUB_ENTRY_FILES,
   output: {
     path: `${__dirname}/dist/`,
     filename: `[name].js`
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      chunks: ['stub1'],
-      filename: `${__dirname}/dist/stub1.html`
-    }),
-    new HtmlWebpackPlugin({
-      chunks: ['stub2'],
-      filename: `${__dirname}/dist/stub2.html`
-    }),
-  ]
+  plugins: OUTPUT_HTMLS
 };
 
 module.exports = webpackConfig;

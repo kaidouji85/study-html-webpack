@@ -9,7 +9,8 @@ var STUB_ENTRY_FILES = {
 var OUTPUT_HTMLS = R.pipe(
   R.mapObjIndexed((value, key) => new HtmlWebpackPlugin({
     chunks: [key],
-    filename: `${__dirname}/stub/${key}.html`
+    filename: `${__dirname}/dist/${key}.html`,
+    template: 'template.html'
   })),
   R.values
 )(STUB_ENTRY_FILES);
